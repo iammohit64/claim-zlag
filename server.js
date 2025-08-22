@@ -1,18 +1,16 @@
-// server.js (Corrected for Vercel Deployment)
+// server.js (Final Corrected Version)
 require('dotenv').config();
 const express = require('express');
 const { ethers } = require('ethers');
 
 const app = express();
-// Vercel handles the port, so we don't need the PORT variable anymore.
 
 app.use(express.json());
 app.use(express.static('public'));
 
 // --- Ethers Setup (v6 Syntax) ---
-// This part remains the same
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-const faucetWallet = new ethers.Wallet(process.env.FAUET_PRIVATE_KEY, provider); // Corrected typo here
+const faucetWallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY, provider); // Corrected typo here
 
 const tokenAbi = ["function transfer(address to, uint256 amount)"];
 const tokenInterface = new ethers.Interface(tokenAbi);
@@ -24,7 +22,6 @@ const tokenContract = new ethers.Contract(
 );
 
 // --- API Endpoint ---
-// This part remains the same
 app.post('/claim', async (req, res) => {
     try {
         const { address, amount } = req.body;
@@ -43,7 +40,7 @@ app.post('/claim', async (req, res) => {
             return res.status(400).json({ error: "Claim amount must be at least 1 token." });
         }
         
-        if (numericAmount > 1000) {
+        if (numericAmount > 1000) { 
             return res.status(400).json({ error: "Claim amount cannot exceed 1000 tokens." });
         }
 
@@ -63,11 +60,5 @@ app.post('/claim', async (req, res) => {
     }
 });
 
-// --- REMOVED THIS BLOCK ---
-// app.listen(PORT, () => {
-//     console.log(`Token claim server running at http://localhost:${PORT}`);
-// });
-
-// --- ADD THIS LINE ---
 // Export the app for Vercel to use
 module.exports = app;
