@@ -6,7 +6,7 @@ A simple, full-stack decentralized application (DApp) that allows users to claim
 
 ---
 
-## ## Features
+## Features
 
 -   **Web Interface:** A simple HTML/CSS page for users to enter their wallet address and the desired token amount.
 -   **Secure Backend:** The faucet wallet's private key is stored securely on the server and is never exposed to the frontend.
@@ -15,7 +15,7 @@ A simple, full-stack decentralized application (DApp) that allows users to claim
 
 ---
 
-## ## Tech Stack
+## Tech Stack
 
 -   **Backend:** Node.js, Express.js
 -   **Blockchain Interaction:** Ethers.js
@@ -25,11 +25,11 @@ A simple, full-stack decentralized application (DApp) that allows users to claim
 
 ---
 
-## ## Setup and Installation
+## Setup and Installation
 
 Follow these steps to get the project running on your local machine.
 
-### **1. Clone the Repository**
+### *1. Clone the Repository*
 
 ```bash
 git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git)
