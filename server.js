@@ -1,41 +1,31 @@
-// server.js (Final Debug Version)
+// server.js (Final Version with Absolute Path)
 require('dotenv').config();
 const express = require('express');
 const { ethers } = require('ethers');
+const path = require('path'); // <-- ADD THIS LINE
 
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'));
+// --- MODIFIED LINE ---
+// Use an absolute path to the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Ethers Setup with Error Catching ---
-let provider, faucetWallet, tokenContract, initializationError;
+// --- Ethers Setup ---
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+const faucetWallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
 
-try {
-    provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-    faucetWallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
+const tokenAbi = ["function transfer(address to, uint256 amount)"];
+const tokenInterface = new ethers.Interface(tokenAbi);
 
-    const tokenAbi = ["function transfer(address to, uint256 amount)"];
-    const tokenInterface = new ethers.Interface(tokenAbi);
-
-    tokenContract = new ethers.Contract(
-        process.env.TOKEN_CONTRACT_ADDRESS,
-        tokenInterface,
-        faucetWallet
-    );
-    console.log("Ethers setup successful.");
-} catch (error) {
-    console.error("CRITICAL ERROR DURING INITIALIZATION:", error);
-    initializationError = error.message; // Store the error message
-}
+const tokenContract = new ethers.Contract(
+    process.env.TOKEN_CONTRACT_ADDRESS,
+    tokenInterface,
+    faucetWallet
+);
 
 // --- API Endpoint ---
 app.post('/claim', async (req, res) => {
-    // FIRST, check if the initialization failed.
-    if (initializationError) {
-        return res.status(500).json({ error: `Server initialization failed: ${initializationError}` });
-    }
-    
     try {
         const { address, amount } = req.body;
 
@@ -69,5 +59,5 @@ app.post('/claim', async (req, res) => {
     }
 });
 
-// Export the app for Vercel to use
+// Export the app for Vercel
 module.exports = app;
