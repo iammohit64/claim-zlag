@@ -1,17 +1,18 @@
-// server.js (Updated to handle amount validation)
+// server.js (Corrected for Vercel Deployment)
 require('dotenv').config();
 const express = require('express');
 const { ethers } = require('ethers');
 
 const app = express();
-const PORT = 3000;
+// Vercel handles the port, so we don't need the PORT variable anymore.
 
 app.use(express.json());
 app.use(express.static('public'));
 
 // --- Ethers Setup (v6 Syntax) ---
+// This part remains the same
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-const faucetWallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
+const faucetWallet = new ethers.Wallet(process.env.FAUET_PRIVATE_KEY, provider); // Corrected typo here
 
 const tokenAbi = ["function transfer(address to, uint256 amount)"];
 const tokenInterface = new ethers.Interface(tokenAbi);
@@ -23,16 +24,15 @@ const tokenContract = new ethers.Contract(
 );
 
 // --- API Endpoint ---
+// This part remains the same
 app.post('/claim', async (req, res) => {
     try {
-        // --- MODIFIED: Get both address and amount from the request ---
         const { address, amount } = req.body;
 
         if (!ethers.isAddress(address)) {
             return res.status(400).json({ error: "Invalid wallet address." });
         }
 
-        // --- NEW: Validation logic for the amount ---
         const numericAmount = parseFloat(amount);
 
         if (!amount || isNaN(numericAmount)) {
@@ -43,14 +43,10 @@ app.post('/claim', async (req, res) => {
             return res.status(400).json({ error: "Claim amount must be at least 1 token." });
         }
         
-        if (numericAmount > 1000) { // Safety limit
+        if (numericAmount > 1000) {
             return res.status(400).json({ error: "Claim amount cannot exceed 1000 tokens." });
         }
-        // --- END OF NEW VALIDATION ---
 
-
-        // --- MODIFIED: Use the validated user amount ---
-        // The amount is a string from the user, parseUnits will handle it.
         const amountToSend = ethers.parseUnits(amount, 18);
 
         console.log(`Attempting to send ${amount.toString()} tokens to ${address}...`);
@@ -67,6 +63,11 @@ app.post('/claim', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Token claim server running at http://localhost:${PORT}`);
-});
+// --- REMOVED THIS BLOCK ---
+// app.listen(PORT, () => {
+//     console.log(`Token claim server running at http://localhost:${PORT}`);
+// });
+
+// --- ADD THIS LINE ---
+// Export the app for Vercel to use
+module.exports = app;
