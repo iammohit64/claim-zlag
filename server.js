@@ -1,14 +1,12 @@
-// server.js (Final Version with Absolute Path)
+// server.js (Final Production Version)
 require('dotenv').config();
 const express = require('express');
 const { ethers } = require('ethers');
-const path = require('path'); // <-- ADD THIS LINE
+const path = require('path');
 
 const app = express();
 
 app.use(express.json());
-// --- MODIFIED LINE ---
-// Use an absolute path to the 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Ethers Setup ---
@@ -35,27 +33,23 @@ app.post('/claim', async (req, res) => {
 
         const numericAmount = parseFloat(amount);
 
-        if (!amount || isNaN(numericAmount)) {
-            return res.status(400).json({ error: "Invalid amount provided." });
-        }
-
-        if (numericAmount < 1) {
-            return res.status(400).json({ error: "Claim amount must be at least 1 token." });
-        }
-        
-        if (numericAmount > 1000) { 
-            return res.status(400).json({ error: "Claim amount cannot exceed 1000 tokens." });
+        if (!amount || isNaN(numericAmount) || numericAmount < 1 || numericAmount > 1000) {
+            return res.status(400).json({ error: "Amount must be between 1 and 1000." });
         }
 
         const amountToSend = ethers.parseUnits(amount, 18);
-        const tx = await tokenContract.transfer(address, amountToSend);
-        await tx.wait();
 
-        res.status(200).json({ message: "Tokens claimed successfully!", txHash: tx.hash });
+        // Send the transaction but DO NOT wait for it to be mined.
+        const tx = await tokenContract.transfer(address, amountToSend);
+
+        console.log(`Transaction sent. Hash: ${tx.hash}`);
+
+        // Respond immediately with the transaction hash.
+        res.status(200).json({ message: "Transaction sent successfully!", txHash: tx.hash });
 
     } catch (error) {
         console.error("Claiming failed:", error);
-        res.status(500).json({ error: "Failed to claim tokens. Please try again later." });
+        res.status(500).json({ error: "Failed to send transaction. Please check the server logs." });
     }
 });
 
