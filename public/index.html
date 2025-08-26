@@ -5,13 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claim Your Zlag Tokens!</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f2f5; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; width: 400px; }
-        input { width: 90%; padding: 10px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ccc; font-size: 16px; }
-        button { padding: 10px 20px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:disabled { background-color: #aaa; }
-        #message { margin-top: 20px; font-weight: bold; min-height: 20px; word-wrap: break-word; }
+        /* A slightly more modern font and color scheme */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f7f9;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 20px;
+            word-wrap: break-word;
+        }
+
+        /* --- NEW UX INFO BOX --- */
+        .info-box {
+            margin-top: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background-color: #fafafa;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .info-box h3 svg {
+            margin-right: 8px;
+        }
+        .info-box p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .info-box a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -20,10 +114,26 @@
         
         <input type="text" id="walletAddress" placeholder="Enter your wallet address (0x...)">
         
-        <input type="number" id="tokenAmount" placeholder="Amount to claim (min 1, max 1000)">
+        <input type="number" id="tokenAmount" placeholder="Amount (min 1, max 1000)">
         
         <button id="claimButton">Claim Tokens</button>
         <div id="message"></div>
+
+        <div class="info-box">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                Please Note
+            </h3>
+            <p>
+                Zlag is a test token and this faucet operates on the <strong>Polygon Amoy Testnet</strong>.
+            </p>
+            <p>
+                You'll need a small amount of test MATIC in your wallet to cover the network fees (gas). 
+                <a href="https://faucet.polygon.technology/" target="_blank" rel="noopener noreferrer">Get free MATIC here.</a>
+            </p>
+        </div>
     </div>
 
     <script src="script.js"></script>
