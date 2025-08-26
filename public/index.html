@@ -74,6 +74,8 @@
             min-height: 20px;
             word-wrap: break-word;
         }
+
+        /* --- NEW SETUP GUIDE --- */
         .setup-guide {
             background: white;
             padding: 30px 40px;
@@ -112,13 +114,13 @@
             border: 1px solid #eee;
             border-radius: 8px;
             padding: 15px;
+            font-family: monospace;
             font-size: 14px;
             margin: 15px 0;
+            position: relative;
         }
         .details strong {
             color: #333;
-            display: block;
-            margin-bottom: 10px;
         }
         .action-button {
             background-color: #28a745;
@@ -131,25 +133,7 @@
         .action-button:hover {
             background-color: #218838;
         }
-
-        /* --- CSS CHANGES ARE HERE --- */
-        .address-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #fff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-        }
-        #tokenAddress {
-            font-family: monospace;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 10px;
-        }
-        .copy-button {
+         .copy-button {
             background-color: #6c757d;
             border-radius: 5px;
             padding: 5px 10px;
@@ -181,6 +165,12 @@
                 <h3>Step 1: Connect to Polygon Amoy</h3>
                 <p>Ensure your wallet is connected to the correct test network.</p>
                 <button class="action-button" id="addNetworkButton">Add Polygon Amoy Network</button>
+                <div class="details">
+                    <strong>Network Name:</strong> Polygon Amoy Testnet<br>
+                    <strong>RPC URL:</strong> https://rpc-amoy.polygon.technology/<br>
+                    <strong>Chain ID:</strong> 80002<br>
+                    <strong>Currency Symbol:</strong> MATIC
+                </div>
             </div>
 
             <div class="step">
@@ -196,11 +186,9 @@
                 <p>After claiming, the Zlag token might not appear automatically. Use the button below or import it manually using the contract address.</p>
                 <button class="action-button" id="addTokenButton">Add Zlag to Wallet</button>
                 <div class="details">
-                    <strong>Token Address:</strong>
-                    <div class="address-container">
-                        <span id="tokenAddress">0xea4808283eFC9140BBea9E5465AEAF102DDA1b85</span>
-                        <button class="copy-button" id="copyButton">Copy</button>
-                    </div>
+                    <strong>Token Address:</strong><br>
+                    <span id="tokenAddress">0xea4808283eFC9140BBea9E5465AEAF102DDA1b85</span>
+                    <button class="copy-button" id="copyButton">Copy</button>
                 </div>
             </div>
         </div>
@@ -212,10 +200,6 @@
     <script>
         // Add Polygon Amoy Network to MetaMask
         document.getElementById('addNetworkButton').addEventListener('click', () => {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask is not installed. Please install it to use this feature.');
-                return;
-            }
             window.ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [{
@@ -230,17 +214,13 @@
                     blockExplorerUrls: ['https://www.oklink.com/amoy']
                 }]
             }).catch((error) => {
-                console.error('Failed to add the network:', error);
+                console.error(error);
             });
         });
 
         // Add Zlag Token to MetaMask
         const tokenAddress = '0xea4808283eFC9140BBea9E5465AEAF102DDA1b85';
         document.getElementById('addTokenButton').addEventListener('click', () => {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask is not installed. Please install it to use this feature.');
-                return;
-            }
             window.ethereum.request({
                 method: 'wallet_watchAsset',
                 params: {
@@ -249,11 +229,11 @@
                         address: tokenAddress,
                         symbol: 'ZLAG',
                         decimals: 18,
-                        image: '', // You can add a URL to your token's icon here
+                        image: 'https://example.com/zlag-token-icon.png', // Optional: Add a URL to your token's icon
                     },
                 },
             }).catch((error) => {
-                console.error('Failed to add the token:', error);
+                console.error(error);
             });
         });
 
